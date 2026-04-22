@@ -2,8 +2,8 @@ plugins {
     id 'java'
 }
 
-group = 'systems.grebe'
-version = '1.0-SNAPSHOT'
+group = 'dev.grebe'
+version = '1.0.0'
 
 repositories {
     mavenCentral()
