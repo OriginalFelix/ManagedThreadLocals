@@ -45,6 +45,7 @@ public class ManagedThreadLocalTest {
 		assertTrue(closed.get(), "The MockManagedClosable should be closed when thread exits.");
 	}
 
+
 	@Test
 	public void testCleanUpOnRemove() {
 		ManagedThreadLocal<MockManagedClosable> threadLocal = new ManagedThreadLocal<>();
@@ -52,6 +53,17 @@ public class ManagedThreadLocalTest {
 		threadLocal.set(mockValue);
 		threadLocal.remove();
 		assertTrue(mockValue.isClosed(), "The MockManagedClosable should be closed when cleaned up.");
+	}
+
+
+	@Test
+	public void testOnThreadLocalRemoval() {
+		AtomicBoolean closed = new AtomicBoolean(false);
+		try (ManagedThreadLocal<MockManagedClosable> threadLocal = new ManagedThreadLocal<>()) {
+			MockManagedClosable mockValue = new MockManagedClosable(() -> closed.set(true));
+			threadLocal.set(mockValue);
+		}
+		assertTrue(closed.get(), "The MockManagedClosable should be closed when thread-local is removed.");
 	}
 
 
